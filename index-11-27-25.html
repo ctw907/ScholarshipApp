@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workflow Scholarship Application</title>
+  <link rel="stylesheet" href="style.css?v=1" />
+</head>
+<body>
+  <div class="shell">
+    <div class="app-card">
+      <header class="app-header">
+        <div class="logo-mark">CTW</div>
+        <div>
+          <h1>Workflow Scholarship Application</h1>
+          <p class="subtitle">
+            A short application to help us understand your team, your tools, and where smarter systems could unlock the most value.
+          </p>
+        </div>
+      </header>
+
+      <section class="meta-bar">
+        <div class="progress-wrapper">
+          <div id="stepLabel" class="step-label">Step 1 of 3 · About you</div>
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+        </div>
+        <div class="insight-chip">
+          Form personalization: <span id="personalizationScore">0%</span>
+        </div>
+      </section>
+
+      <div class="layout">
+        <!-- LEFT: FORM -->
+        <main class="form-column">
+          <form id="scholarshipForm" novalidate>
+            <!-- STEP 1 -->
+            <div class="step active" data-step="1">
+              <h2>About you</h2>
+
+              <label for="fullName">Full name *</label>
+              <input type="text" id="fullName" autocomplete="name" placeholder="Your name" />
+
+              <label for="email">Email *</label>
+              <input type="email" id="email" autocomplete="email" placeholder="you@company.com" />
+
+              <label for="company">Company</label>
+              <input type="text" id="company" placeholder="Company name" />
+
+              <label for="role">Your role</label>
+              <input type="text" id="role" placeholder="e.g. Operations Manager" />
+
+              <div class="nav-buttons">
+                <button type="button" class="btn primary" id="next1">Next</button>
+              </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="step" data-step="2">
+              <h2>Your operation</h2>
+
+              <label>What's your primary concern day to day? *</label>
+              <div class="focus-tiles" id="focusGroup">
+                <button type="button" class="tile" data-value="Too much on my plate">Too much on my plate</button>
+                <button type="button" class="tile" data-value="Things slip through the cracks">Things slip through the cracks</button>
+                <button type="button" class="tile" data-value="Too many manual steps">Too many manual steps</button>
+                <button type="button" class="tile" data-value="Communication feels messy">Communication feels messy</button>
+                <button type="button" class="tile" data-value="Our tools are all over the place">Our tools are all over the place</button>
+              </div>
+              <input type="hidden" id="focus" />
+
+              <label for="teamSize">Rough company size</label>
+              <input
+                type="number"
+                id="teamSize"
+                placeholder="Number of people in the company"
+                min="1"
+                step="1"
+              />
+
+              <label for="bottleneck">Biggest operational bottleneck *</label>
+              <textarea id="bottleneck" rows="3" placeholder="Where does work stall, slip, or get re-done?"></textarea>
+
+              <label for="tools">Key Apps, software, and other tools you use</label>
+              <textarea id="tools" rows="2" placeholder="e.g. Excel, email, text, Teams, Procore, QuickBooks"></textarea>
+
+              <div class="nav-buttons">
+                <button type="button" class="btn ghost" id="back2">Back</button>
+                <button type="button" class="btn primary" id="next2">Next</button>
+              </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="step" data-step="3">
+              <h2>What “perfect” looks like</h2>
+
+              <label for="vision">If this scholarship worked perfectly, what would be different 6 months from now? *</label>
+              <textarea id="vision" rows="3" placeholder="Fewer emails? Tighter approvals? Live job costs? Describe it in your own words."></textarea>
+
+              <label for="timeline">How soon are you hoping to improve this?</label>
+              <select id="timeline">
+                <option value="">Choose one</option>
+                <option value="ASAP – this quarter">ASAP – this quarter</option>
+                <option value="This year">This year</option>
+                <option value="Exploring for later">Exploring for later</option>
+              </select>
+
+              <!-- Checkbox about contacting applicants removed -->
+
+              <div class="nav-buttons">
+                <button type="button" class="btn ghost" id="back3">Back</button>
+                <button type="submit" class="btn primary" id="submitBtn">Submit application</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="formMessage" class="form-message" aria-live="polite"></div>
+        </main>
+
+        <!-- RIGHT: LIVE SNAPSHOT (visually removed via CSS) -->
+        <aside class="preview-column">
+          <div class="preview-card">
+            <h3>Live snapshot</h3>
+            <p class="preview-subtitle">
+              As you type, we build a quick profile of your company and where a scholarship could have the most impact.
+            </p>
+
+            <div class="preview-section">
+              <h4>Profile</h4>
+              <p><span class="label">Name</span> <span id="prevName" class="value-muted">Add your name</span></p>
+              <p><span class="label">Email</span> <span id="prevEmail" class="value-muted">Add your email</span></p>
+              <p><span class="label">Company</span> <span id="prevCompany" class="value-muted">Optional</span></p>
+              <p><span class="label">Role</span> <span id="prevRole" class="value-muted">Optional</span></p>
+            </div>
+
+            <div class="preview-section">
+              <h4>Operation</h4>
+              <p><span class="label">Focus</span> <span id="prevFocus" class="value-muted">Choose a focus area</span></p>
+              <p><span class="label">Team size</span> <span id="prevTeamSize" class="value-muted">Optional</span></p>
+              <p><span class="label">Bottleneck</span> <span id="prevBottleneck" class="value-muted">Describe your main friction</span></p>
+            </div>
+
+            <div class="preview-section">
+              <h4>Desired outcome</h4>
+              <p><span class="label">Vision</span> <span id="prevVision" class="value-muted">Tell us what “perfect” looks like</span></p>
+              <p><span class="label">Timeline</span> <span id="prevTimeline" class="value-muted">Optional</span></p>
+            </div>
+
+            <div class="preview-footer">
+              <div class="pill" id="analysisStatus">Waiting for details…</div>
+              <small class="footnote">
+                This preview doesn’t affect selection. It’s here to show you the kind of clarity we look for when designing systems.
+              </small>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js?v=1"></script>
+</body>
+</html>
