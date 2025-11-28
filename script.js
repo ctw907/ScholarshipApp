@@ -1,6 +1,7 @@
 // Configure your POST endpoint here.
-// Replace this URL with your real endpoint when ready.
-const POST_ENDPOINT = "https://defaultff6ba2824f544b34b3ee2dfa83ff71.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e37e49114c9f45ba9212561f8d20f5cc/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hHlIPWojRFAbFF90MEL4_SJzwPkKRwTzm7VCPEQ8qFE"; // e.g. "https://customtradeworkflows.com/api/scholarship"
+// Replace this URL with your real HTTP trigger URL from
+// "When an HTTP request is received".
+const POST_ENDPOINT = "https://defaultff6ba2824f544b34b3ee2dfa83ff71.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e37e49114c9f45ba9212561f8d20f5cc/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hHlIPWojRFAbFF90MEL4_SJzwPkKRwTzm7VCPEQ8qFE";
 
 // Elements
 const form = document.getElementById("scholarshipForm");
@@ -116,10 +117,10 @@ form.addEventListener("submit", async (e) => {
 // Build payload with simple primitives (strings and integers)
 function buildPayload() {
   const sizeValue = teamSize.value.trim();
+  // Always send an integer for companySize; use 0 when blank/invalid
+  const parsedSize = parseInt(sizeValue, 10);
   const companySize =
-    sizeValue !== "" && !Number.isNaN(parseInt(sizeValue, 10))
-      ? parseInt(sizeValue, 10)
-      : "";
+    sizeValue === "" || Number.isNaN(parsedSize) ? 0 : parsedSize;
 
   return {
     fullName: fullName.value.trim(),
@@ -127,7 +128,7 @@ function buildPayload() {
     company: company.value.trim(),
     role: role.value.trim(),
     primaryConcern: focusHidden.value,
-    companySize: companySize, // integer when provided, otherwise empty string
+    companySize: companySize, // integer only
     biggestBottleneck: bottleneck.value.trim(),
     tools: tools.value.trim(),
     vision: vision.value.trim(),
@@ -300,5 +301,3 @@ goToStep(1);
     updatePersonalization();
   });
 });
-
-
