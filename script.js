@@ -1,3 +1,7 @@
+// Configure your POST endpoint here.
+// Replace this URL with your real endpoint when ready.
+const POST_ENDPOINT = ""; // e.g. "https://customtradeworkflows.com/api/scholarship"
+
 // Elements
 const form = document.getElementById("scholarshipForm");
 const steps = document.querySelectorAll(".step");
@@ -18,9 +22,8 @@ const bottleneck = document.getElementById("bottleneck");
 const tools = document.getElementById("tools");
 const vision = document.getElementById("vision");
 const timeline = document.getElementById("timeline");
-const consent = document.getElementById("consent");
 
-// Preview fields
+// Preview fields (kept for logic, visually hidden in CSS)
 const prevName = document.getElementById("prevName");
 const prevEmail = document.getElementById("prevEmail");
 const prevCompany = document.getElementById("prevCompany");
@@ -63,7 +66,7 @@ focusTiles.forEach((tile) => {
 });
 
 // Form submit
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   clearMessage();
 
@@ -76,13 +79,61 @@ form.addEventListener("submit", (e) => {
   formMessage.className = "form-message";
   formMessage.textContent = "";
 
+  const payload = buildPayload();
+
+  // Optional HTTP POST request
+  if (POST_ENDPOINT) {
+    try {
+      const response = await fetch(POST_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+    } catch (err) {
+      console.error("POST failed:", err);
+      formMessage.className = "form-message error";
+      formMessage.textContent =
+        "We captured your answers locally, but there was an issue sending them to the server. Please try again later.";
+      return;
+    }
+  }
+
   setTimeout(() => {
-    analysisStatus.textContent = "Analysis ready – this looks like a strong candidate for meaningful workflow upgrades.";
+    analysisStatus.textContent =
+      "Analysis ready – this looks like a strong candidate for meaningful workflow upgrades.";
     formMessage.className = "form-message success";
     formMessage.textContent =
       "Thank you. Your application has been captured. If selected, we’ll follow up with next steps and deeper questions.";
   }, 650);
 });
+
+// Build payload with simple primitives (strings and integers)
+function buildPayload() {
+  const sizeValue = teamSize.value.trim();
+  const companySize =
+    sizeValue !== "" && !Number.isNaN(parseInt(sizeValue, 10))
+      ? parseInt(sizeValue, 10)
+      : "";
+
+  return {
+    fullName: fullName.value.trim(),
+    email: email.value.trim(),
+    company: company.value.trim(),
+    role: role.value.trim(),
+    primaryConcern: focusHidden.value,
+    companySize: companySize, // integer when provided, otherwise empty string
+    biggestBottleneck: bottleneck.value.trim(),
+    tools: tools.value.trim(),
+    vision: vision.value.trim(),
+    timeline: timeline.value,
+  };
+}
 
 // State
 let currentStep = 1;
@@ -100,7 +151,7 @@ function goToStep(step) {
   const labels = {
     1: "Step 1 of 3 · About you",
     2: "Step 2 of 3 · Your operation",
-    3: "Step 3 of 3 · What “better” looks like",
+    3: "Step 3 of 3 · What “perfect” looks like",
   };
   stepLabel.textContent = labels[currentStep] || "";
 
@@ -128,7 +179,7 @@ function validateStep1() {
 function validateStep2() {
   clearMessage();
   if (!focusHidden.value.trim()) {
-    showError("Pick the area you spend most of your time in.");
+    showError("Pick the concern that feels closest to your day-to-day.");
     return false;
   }
   if (!bottleneck.value.trim()) {
@@ -141,13 +192,10 @@ function validateStep2() {
 function validateStep3() {
   clearMessage();
   if (!vision.value.trim()) {
-    showError("Share what “better” looks like in 3–6 sentences or less.");
+    showError("Share what “perfect” looks like in 3–6 sentences or less.");
     return false;
   }
-  if (!consent.checked) {
-    showError("Please confirm you’re comfortable being contacted about this application.");
-    return false;
-  }
+  // Checkbox about contacting applicants has been removed.
   return true;
 }
 
@@ -189,7 +237,7 @@ function updatePreview() {
   prevBottleneck.classList.toggle("value-muted", !trim(bottleneck));
 
   prevVision.textContent =
-    trim(vision) || "Tell us what “better” looks like";
+    trim(vision) || "Tell us what “perfect” looks like";
   prevVision.classList.toggle("value-muted", !trim(vision));
 
   prevTimeline.textContent = timeline.value || "Optional";

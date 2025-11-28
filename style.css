@@ -48,8 +48,7 @@ body {
 
 /* Header */
 
-.app-header {
-  display: flex;
+.app-header isplay: flex;
   gap: 16px;
   align-items: center;
   margin-bottom: 16px;
@@ -128,16 +127,17 @@ h1 {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
 }
 
 .form-column {
-  border-right: 1px dashed var(--border-subtle);
-  padding-right: 18px;
+  border-right: none;
+  padding-right: 0;
 }
 
 .preview-column {
+  display: none;
   padding-left: 4px;
 }
 
@@ -162,6 +162,7 @@ label {
 
 input[type="text"],
 input[type="email"],
+input[type="number"],
 select,
 textarea {
   width: 100%;
@@ -290,7 +291,7 @@ textarea {
   }
 }
 
-/* Consent */
+/* Consent (no checkbox now, but keep spacing helper if reused) */
 
 .consent-label {
   display: flex;
@@ -321,7 +322,7 @@ textarea {
   color: #166534;
 }
 
-/* Preview */
+/* Preview (kept for JS, visually hidden via .preview-column) */
 
 .preview-card {
   background: linear-gradient(135deg, #0f172a, #111827);
