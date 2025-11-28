@@ -1,6 +1,6 @@
 // Configure your POST endpoint here.
 // Replace this URL with your real endpoint when ready.
-const POST_ENDPOINT = "https://defaultff6ba2824f544b34b3ee2dfa83ff71.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e37e49114c9f45ba9212561f8d20f5cc/triggers/manual/paths/invoke?api-version=1"; // e.g. "https://customtradeworkflows.com/api/scholarship"
+const POST_ENDPOINT = "https://defaultff6ba2824f544b34b3ee2dfa83ff71.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e37e49114c9f45ba9212561f8d20f5cc/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hHlIPWojRFAbFF90MEL4_SJzwPkKRwTzm7VCPEQ8qFE"; // e.g. "https://customtradeworkflows.com/api/scholarship"
 
 // Elements
 const form = document.getElementById("scholarshipForm");
@@ -300,4 +300,5 @@ goToStep(1);
     updatePersonalization();
   });
 });
+
 
